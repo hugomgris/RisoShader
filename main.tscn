@@ -4,18 +4,22 @@
 [ext_resource type="PackedScene" uid="uid://byakrgga62olw" path="res://test_cube.tscn" id="1_ig7tw"]
 [ext_resource type="Shader" uid="uid://b88ub0qlpv8j1" path="res://Risograph.gdshader" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://2ymi75ey0hmf" path="res://zappyLogo_test.glb" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dyqs1xsuoyj0e" path="res://testCubeCMY.glb" id="5_lquwl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xm2m"]
 shader = ExtResource("2_0xm2m")
-shader_parameter/color_top = Vector3(1, 0.055, 0.2)
-shader_parameter/color_left = Vector3(0.515, 0.665, 0.6)
-shader_parameter/color_right = Vector3(1, 0.71, 0.26)
+shader_parameter/ink1 = Vector3(1, 0.15, 0.3)
+shader_parameter/ink2 = Vector3(0.55, 0.1, 0.8)
+shader_parameter/ink3 = Vector3(1, 0.85, 0.1)
+shader_parameter/ink4 = Vector3(-0.195, 1.025, 0.485)
+shader_parameter/ink5 = Vector3(-0.69, 0.2, 0.6)
+shader_parameter/ink6 = Vector3(0.91, 0.41, -1.355)
 shader_parameter/background = Vector3(0.914, 0.882, 0.804)
 shader_parameter/red_threshold = 0.7
 shader_parameter/green_threshold = 0.3
 shader_parameter/blue_threshold = 0.3
 shader_parameter/stipple_mode = 1
-shader_parameter/stipple_density = 1.4849999999999999
+shader_parameter/stipple_density = 1.485
 shader_parameter/stipple_scale = 500.0
 shader_parameter/stipple_size = 0.61
 shader_parameter/stipple_softness = 0.145
@@ -117,3 +121,6 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, -2.4
 
 [node name="zappyLogo_test" parent="SubViewportContainer/SubViewport/testCube" unique_id=1639123364 instance=ExtResource("4_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.779493, 0, 0)
+
+[node name="testCubeCMY2" parent="SubViewportContainer/SubViewport" unique_id=1431612868 instance=ExtResource("5_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.713361)
