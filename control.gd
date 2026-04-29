@@ -1,21 +1,15 @@
-# control_test.gd (reemplaza temporalmente tu script actual)
 extends Control
+@onready var riso_viewport  = $HBoxContainer/RisoViewport/SubViewport
+@onready var riso_container = $HBoxContainer/RisoViewport
+@onready var id_viewport    = $HBoxContainer/IdMapViewport/SubViewport
 
 func _ready():
-	# Obtener referencia
-	var container = $SubViewportContainer
-	var viewport = $SubViewportContainer/SubViewport
-	
-	# Configuración mínima
-	container.stretch = true
-	
-	# Forzar actualización
-	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	
-	print("--- DIAGNÓSTICO ---")
-	print("Container material: ", container.material)
-	print("Shader activo? ", container.material != null)
-	print("---")
-	
-	# Si el cubo no aparece aún, quitar el shader manualmente
-	# container.material = null
+	$HBoxContainer/IdMapViewport.visible = false
+	id_viewport.size = riso_viewport.size
+	id_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	var mat = riso_container.material as ShaderMaterial
+	mat.set_shader_parameter("id_map", id_viewport.get_texture())
+
+func _process(_delta):
+	if id_viewport.size != riso_viewport.size:
+		id_viewport.size = riso_viewport.size

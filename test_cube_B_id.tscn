@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://p88qbcm2n0y6"]
+
+[ext_resource type="PackedScene" uid="uid://bgsk50nereqgd" path="res://testCube_ID.glb" id="1_pxosj"]
+
+[node name="testCube_ID" unique_id=530061331 instance=ExtResource("1_pxosj")]
