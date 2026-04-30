@@ -1,36 +1,30 @@
 [gd_scene format=3 uid="uid://70iybpd0os4l"]
 
 [ext_resource type="Script" uid="uid://cmklgd4wigpu3" path="res://control.gd" id="1_h2yge"]
-[ext_resource type="PackedScene" uid="uid://byakrgga62olw" path="res://test_cube.tscn" id="1_ig7tw"]
 [ext_resource type="Shader" uid="uid://b88ub0qlpv8j1" path="res://Risograph.gdshader" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://2ymi75ey0hmf" path="res://zappyLogo_test.glb" id="4_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://dyqs1xsuoyj0e" path="res://testCubeCMY.glb" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://mf5v201sw7hw" path="res://test_cube_red.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://dt3210t7w2xd0" path="res://testCube_RED_2.glb" id="4_1bvp3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xm2m"]
 shader = ExtResource("2_0xm2m")
-shader_parameter/ink1 = Vector3(1, 0.15, 0.3)
-shader_parameter/ink2 = Vector3(0.55, 0.1, 0.8)
-shader_parameter/ink3 = Vector3(1, 0.85, 0.1)
-shader_parameter/ink4 = Vector3(-0.195, 1.025, 0.485)
-shader_parameter/ink5 = Vector3(-0.69, 0.2, 0.6)
-shader_parameter/ink6 = Vector3(0.91, 0.41, -1.355)
+shader_parameter/ink_red = Vector3(1, 0.15, 0.3)
+shader_parameter/ink_green = Vector3(0.2, 0.75, 0.3)
+shader_parameter/ink_blue = Vector3(0.2, 0.4, 0.9)
 shader_parameter/background = Vector3(0.914, 0.882, 0.804)
-shader_parameter/red_threshold = 0.7
-shader_parameter/green_threshold = 0.3
-shader_parameter/blue_threshold = 0.3
 shader_parameter/stipple_mode = 1
-shader_parameter/stipple_density = 1.485
-shader_parameter/stipple_scale = 500.0
-shader_parameter/stipple_size = 0.61
-shader_parameter/stipple_softness = 0.145
-shader_parameter/stipple_jitter = 0.3
-shader_parameter/ink_opacity = 0.7
+shader_parameter/stipple_scale = 800.0
+shader_parameter/stipple_size = 1.0
+shader_parameter/stipple_softness = 0.675
+shader_parameter/stipple_jitter = 0.5
+shader_parameter/ink_opacity = 1.01
 shader_parameter/paper_grain_amount = 0.1
-shader_parameter/paper_grain_size = 0.2
-shader_parameter/offset_top_px = Vector2(-0.96, -0.15)
-shader_parameter/offset_left_px = Vector2(-2.64, 0)
-shader_parameter/offset_right_px = Vector2(1, 0)
+shader_parameter/paper_grain_size = 0.46
+shader_parameter/offset_r_px = Vector2(0, 0)
+shader_parameter/offset_g_px = Vector2(1.5, -1.5)
+shader_parameter/offset_b_px = Vector2(-1.5, 1.5)
 shader_parameter/screen_size = Vector2(1920, 1080)
+shader_parameter/density_gamma = 1.0
+shader_parameter/channel_threshold = 0.05
 
 [sub_resource type="Environment" id="Environment_7dm0k"]
 background_mode = 1
@@ -61,66 +55,34 @@ size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=464153497]
-transform = Transform3D(0.7071068, -0.40860704, 0.5770964, 0, 0.8161376, 0.5778576, -0.7071068, -0.40860704, 0.5770964, 36.9877, 19.587463, 19.144241)
+transform = Transform3D(0.7071068, -0.40860704, 0.5770964, 0, 0.8161376, 0.5778576, -0.7071068, -0.40860704, 0.5770964, 22.982147, 19.587463, 19.144241)
 projection = 1
 current = true
-size = 35.16
+size = 10.0
 near = 0.001
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" unique_id=1894928017]
 environment = SubResource("Environment_7dm0k")
 
-[node name="testCube" parent="SubViewportContainer/SubViewport" unique_id=1496996747 instance=ExtResource("1_ig7tw")]
+[node name="testCube_RED2" parent="SubViewportContainer/SubViewport" unique_id=420091669 instance=ExtResource("3_h2yge")]
 
-[node name="testCube" parent="SubViewportContainer/SubViewport/testCube" unique_id=1087968808 instance=ExtResource("1_ig7tw")]
+[node name="testCube_RED_2" parent="SubViewportContainer/SubViewport" unique_id=1972828249 instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 
-[node name="testCube2" parent="SubViewportContainer/SubViewport/testCube" unique_id=1573434723 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 2.5)
+[node name="testCube_RED3" parent="SubViewportContainer/SubViewport" unique_id=14166866 instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 
-[node name="testCube3" parent="SubViewportContainer/SubViewport/testCube" unique_id=266884339 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 0)
+[node name="testCube_RED_3" parent="SubViewportContainer/SubViewport" unique_id=1389659317 instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 
-[node name="testCube4" parent="SubViewportContainer/SubViewport/testCube" unique_id=811962473 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2.5, 0, 2.5)
+[node name="testCube_RED4" parent="SubViewportContainer/SubViewport" unique_id=1600353641 instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
 
-[node name="testCube5" parent="SubViewportContainer/SubViewport/testCube" unique_id=692302592 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+[node name="testCube_RED_4" parent="SubViewportContainer/SubViewport" unique_id=320832159 instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
 
-[node name="testCube6" parent="SubViewportContainer/SubViewport/testCube" unique_id=1816674517 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, 2.5)
+[node name="testCube_RED5" parent="SubViewportContainer/SubViewport" unique_id=1510010885 instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -2)
 
-[node name="testCube7" parent="SubViewportContainer/SubViewport/testCube" unique_id=1993630837 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
-
-[node name="testCube8" parent="SubViewportContainer/SubViewport/testCube" unique_id=1294807727 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, 2.5)
-
-[node name="testCube9" parent="SubViewportContainer/SubViewport/testCube" unique_id=1281262566 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.9707327)
-
-[node name="testCube10" parent="SubViewportContainer/SubViewport/testCube" unique_id=335908533 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, -2.4707327)
-
-[node name="testCube11" parent="SubViewportContainer/SubViewport/testCube" unique_id=1483274847 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -4.9707327)
-
-[node name="testCube12" parent="SubViewportContainer/SubViewport/testCube" unique_id=1596037710 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2, 0, -2.4707327)
-
-[node name="testCube13" parent="SubViewportContainer/SubViewport/testCube" unique_id=1586728110 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -4.9707327)
-
-[node name="testCube14" parent="SubViewportContainer/SubViewport/testCube" unique_id=1627467046 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, -2.4707327)
-
-[node name="testCube15" parent="SubViewportContainer/SubViewport/testCube" unique_id=1444567125 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -4.9707327)
-
-[node name="testCube16" parent="SubViewportContainer/SubViewport/testCube" unique_id=1741320634 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, -2.4707327)
-
-[node name="zappyLogo_test" parent="SubViewportContainer/SubViewport/testCube" unique_id=1639123364 instance=ExtResource("4_1bvp3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.779493, 0, 0)
-
-[node name="testCubeCMY2" parent="SubViewportContainer/SubViewport" unique_id=1431612868 instance=ExtResource("5_lquwl")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.6024094, 0, 21.02689)
+[node name="testCube_RED_5" parent="SubViewportContainer/SubViewport" unique_id=1592631929 instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -2)
