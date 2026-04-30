@@ -1,23 +1,29 @@
 shader_type canvas_item;
 
-// Palette
-uniform vec3 color_top   = vec3(1.0, 0.15, 0.3);
-uniform vec3 color_left  = vec3(0.55, 0.1, 0.8);
-uniform vec3 color_right = vec3(1.0, 0.85, 0.1);
-uniform vec3 background  = vec3(0.93, 0.91, 0.88);
+// Palette - RGB group
+uniform vec3 ink1 = vec3(1.0, 0.15, 0.3);   // red faces
+uniform vec3 ink2 = vec3(0.55, 0.1, 0.8);   // green faces
+uniform vec3 ink3 = vec3(1.0, 0.85, 0.1);   // blue faces
+
+// Palette - CMY group
+uniform vec3 ink4 = vec3(0.2, 0.8, 0.7);    // cyan faces
+uniform vec3 ink5 = vec3(0.9, 0.2, 0.6);    // magenta faces
+uniform vec3 ink6 = vec3(0.95, 0.75, 0.1);  // yellow faces
+
+uniform vec3 background = vec3(0.93, 0.91, 0.88);
 
 // Detection
 uniform float red_threshold   = 0.7;
 uniform float green_threshold = 0.3;
 uniform float blue_threshold  = 0.3;
 
-// Stipple — shared
-uniform int   stipple_mode     = 1;    // 0 = noise, 1 = halftone
+// Stipple
+uniform int   stipple_mode     = 1;
 uniform float stipple_density  = 0.8;
 uniform float stipple_scale    = 40.0;
 uniform float stipple_size     = 1.0;
 uniform float stipple_softness = 0.05;
-uniform float stipple_jitter   = 0.2;  // halftone only
+uniform float stipple_jitter   = 0.2;
 uniform float ink_opacity      = 0.92;
 
 // Paper
@@ -30,26 +36,28 @@ uniform vec2 offset_left_px  = vec2(-1.0, 0.0);
 uniform vec2 offset_right_px = vec2(1.0, 0.0);
 uniform vec2 screen_size     = vec2(1152.0, 648.0);
 
-// --- Helpers ---
-bool is_red(vec3 c)        { return c.r > red_threshold   && c.g < green_threshold && c.b < blue_threshold; }
-bool is_green(vec3 c)      { return c.g > red_threshold   && c.r < green_threshold && c.b < blue_threshold; }
-bool is_blue(vec3 c)       { return c.b > red_threshold   && c.r < green_threshold && c.g < blue_threshold; }
+// --- Detection helpers ---
+bool is_red(vec3 c)     { return c.r > red_threshold   && c.g < green_threshold && c.b < blue_threshold; }
+bool is_green(vec3 c)   { return c.g > red_threshold   && c.r < green_threshold && c.b < blue_threshold; }
+bool is_blue(vec3 c)    { return c.b > red_threshold   && c.r < green_threshold && c.g < blue_threshold; }
+bool is_cyan(vec3 c)    { return c.g > red_threshold   && c.b > red_threshold   && c.r < green_threshold; }
+bool is_magenta(vec3 c) { return c.r > red_threshold   && c.b > red_threshold   && c.g < green_threshold; }
+bool is_yellow(vec3 c)  { return c.r > red_threshold   && c.g > red_threshold   && c.b < green_threshold; }
 bool is_background(vec3 c) { return c.r > 0.9 && c.g > 0.9 && c.b > 0.9; }
 
 float noise(vec2 uv) {
     return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-// --- Noise pipeline ---
 float stipple_noise(vec2 uv) {
-    vec2 scaled_uv = uv * stipple_scale / stipple_size;
-    float a = noise(scaled_uv);
-    float b = noise(scaled_uv * 2.3 + vec2(5.1, 3.7));
-    float c = noise(scaled_uv * 5.7 + vec2(1.3, 8.2));
+    vec2 suv = uv * stipple_scale / stipple_size;
+    float a = noise(suv);
+    float b = noise(suv * 2.3 + vec2(5.1, 3.7));
+    float c = noise(suv * 5.7 + vec2(1.3, 8.2));
     return a * 0.5 + b * 0.3 + c * 0.2;
 }
 
-float stipple_hit(float pattern) {
+float stipple_hit_noise(float pattern) {
     if (stipple_density >= 1.0) return 1.0;
     if (stipple_density <= 0.0) return 0.0;
     float edge = stipple_softness * 0.5;
@@ -58,43 +66,37 @@ float stipple_hit(float pattern) {
                       pattern);
 }
 
-// --- Halftone pipeline ---
 vec2 rotate_uv(vec2 uv, float angle) {
     float s = sin(angle); float c = cos(angle);
     return mat2(vec2(c, s), vec2(-s, c)) * uv;
 }
 
 float halftone(vec2 uv) {
-    float cell = stipple_scale / stipple_size;
+    float cell    = stipple_scale / stipple_size;
     vec2 scaled   = uv * cell;
     vec2 cell_id  = floor(scaled);
     vec2 cell_uv  = fract(scaled) - 0.5;
-
     vec2 jitter_offset = vec2(
         noise(cell_id) - 0.5,
         noise(cell_id + vec2(7.3, 4.1)) - 0.5
     ) * stipple_jitter;
-
     float dist   = length(cell_uv - jitter_offset);
     float radius = sqrt(stipple_density) * 0.5;
     return 1.0 - smoothstep(radius - stipple_softness,
                              radius + stipple_softness, dist);
 }
 
-// --- Dispatch ---
 float get_hit(vec2 uv) {
-    if (stipple_mode == 0) {
-        return stipple_hit(stipple_noise(uv));
-    } else {
-        return halftone(uv);
-    }
+    if (stipple_mode == 0) return stipple_hit_noise(stipple_noise(uv));
+    else return halftone(uv);
 }
 
 void fragment() {
     vec3 pixel_base = texture(TEXTURE, UV).rgb;
-    vec2 off_top    = offset_top_px   / screen_size;
-    vec2 off_left   = offset_left_px  / screen_size;
-    vec2 off_right  = offset_right_px / screen_size;
+
+    vec2 off_top   = offset_top_px   / screen_size;
+    vec2 off_left  = offset_left_px  / screen_size;
+    vec2 off_right = offset_right_px / screen_size;
 
     vec3 pixel_top   = texture(TEXTURE, UV + off_top).rgb;
     vec3 pixel_left  = texture(TEXTURE, UV + off_left).rgb;
@@ -105,20 +107,31 @@ void fragment() {
     if (is_background(pixel_base)) {
         final_color = background;
     } else {
-        bool has_top   = is_red(pixel_top);
-        bool has_left  = is_green(pixel_left);
-        bool has_right = is_blue(pixel_right);
+        // Detect all 6 ink IDs from offset samples
+        bool has_1 = is_red(pixel_top)     || is_red(pixel_left)     || is_red(pixel_right);
+        bool has_2 = is_green(pixel_top)   || is_green(pixel_left)   || is_green(pixel_right);
+        bool has_3 = is_blue(pixel_top)    || is_blue(pixel_left)    || is_blue(pixel_right);
+        bool has_4 = is_cyan(pixel_top)    || is_cyan(pixel_left)    || is_cyan(pixel_right);
+        bool has_5 = is_magenta(pixel_top) || is_magenta(pixel_left) || is_magenta(pixel_right);
+        bool has_6 = is_yellow(pixel_top)  || is_yellow(pixel_left)  || is_yellow(pixel_right);
 
+        // Independent stipple per ink drum — 6 patterns at different angles
         float hit1 = get_hit(rotate_uv(UV, 0.0));
-        float hit2 = get_hit(rotate_uv(UV, 0.261));  // 15°
-        float hit3 = get_hit(rotate_uv(UV, 0.523));  // 30°
+        float hit2 = get_hit(rotate_uv(UV, 0.261));
+        float hit3 = get_hit(rotate_uv(UV, 0.523));
+        float hit4 = get_hit(rotate_uv(UV, 0.785));
+        float hit5 = get_hit(rotate_uv(UV, 1.047));
+        float hit6 = get_hit(rotate_uv(UV, 1.309));
 
         vec3  ink_accum    = vec3(0.0);
         float weight_total = 0.0;
 
-        if (has_top)   { ink_accum += color_top   * hit1; weight_total += hit1; }
-        if (has_left)  { ink_accum += color_left  * hit2; weight_total += hit2; }
-        if (has_right) { ink_accum += color_right * hit3; weight_total += hit3; }
+        if (has_1) { ink_accum += ink1 * hit1; weight_total += hit1; }
+        if (has_2) { ink_accum += ink2 * hit2; weight_total += hit2; }
+        if (has_3) { ink_accum += ink3 * hit3; weight_total += hit3; }
+        if (has_4) { ink_accum += ink4 * hit4; weight_total += hit4; }
+        if (has_5) { ink_accum += ink5 * hit5; weight_total += hit5; }
+        if (has_6) { ink_accum += ink6 * hit6; weight_total += hit6; }
 
         if (weight_total < 0.01) {
             final_color = background;
