@@ -123,4 +123,4 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, -2.4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.779493, 0, 0)
 
 [node name="testCubeCMY2" parent="SubViewportContainer/SubViewport" unique_id=1431612868 instance=ExtResource("5_lquwl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 6.713361)
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 5.279249, 0, 21.02689)
