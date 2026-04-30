@@ -102,10 +102,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.9707327)
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, -2.4707327)
 
 [node name="testCube11" parent="SubViewportContainer/SubViewport/testCube" unique_id=1483274847 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, -4.9707327)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -4.9707327)
 
 [node name="testCube12" parent="SubViewportContainer/SubViewport/testCube" unique_id=1596037710 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2.5, 0, -2.4707327)
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -2, 0, -2.4707327)
 
 [node name="testCube13" parent="SubViewportContainer/SubViewport/testCube" unique_id=1586728110 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -4.9707327)
@@ -123,4 +123,4 @@ transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, -5, 0, -2.4
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.779493, 0, 0)
 
 [node name="testCubeCMY2" parent="SubViewportContainer/SubViewport" unique_id=1431612868 instance=ExtResource("5_lquwl")]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 5.279249, 0, 21.02689)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 4.6024094, 0, 21.02689)
