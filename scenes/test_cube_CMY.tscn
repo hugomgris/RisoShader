@@ -1,5 +1,5 @@
 [gd_scene format=3 uid="uid://dbquw1wg0wqbb"]
 
-[ext_resource type="PackedScene" uid="uid://dyqs1xsuoyj0e" path="res://testCubeCMY.glb" id="1_xod36"]
+[ext_resource type="PackedScene" uid="uid://dyqs1xsuoyj0e" path="res://assets/testCubeCMY.glb" id="1_xod36"]
 
 [node name="testCubeCMY" unique_id=1431612868 instance=ExtResource("1_xod36")]

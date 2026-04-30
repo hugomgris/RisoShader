@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://byakrgga62olw"]
+
+[ext_resource type="PackedScene" uid="uid://mp1d51v2n6ew" path="res://assets/testCube.glb" id="1_85ml7"]
+[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_n06xs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bqnd4"]
+render_priority = 0
+shader = ExtResource("2_n06xs")
+
+[node name="testCube" unique_id=1284561567 instance=ExtResource("1_85ml7")]
+
+[node name="Cube" parent="." index="0" unique_id=1439297259]
+surface_material_override/0 = SubResource("ShaderMaterial_bqnd4")

@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dwke5xcgw3ux5"]
+
+[ext_resource type="Shader" uid="uid://dy2wsjewiyp73" path="res://shaders/ObjectGroup.gdshader" id="1_dfxgt"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_dfxgt")
+shader_parameter/group_color = Color(0, 1, 1, 1)

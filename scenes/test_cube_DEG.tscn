@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://5l1qitpuncub"]
+
+[ext_resource type="PackedScene" uid="uid://cp14u0x5873v" path="res://assets/testCubeDEG.glb" id="1_v2ihm"]
+[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_tbp0h"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_41oif"]
+render_priority = 0
+shader = ExtResource("2_tbp0h")
+
+[node name="testCubeDEG" unique_id=912103654 instance=ExtResource("1_v2ihm")]
+
+[node name="CubeDEG" parent="." index="0" unique_id=1896472092]
+surface_material_override/0 = SubResource("ShaderMaterial_41oif")

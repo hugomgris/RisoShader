@@ -1,0 +1,169 @@
+[gd_scene format=3 uid="uid://70iybpd0os4l"]
+
+[ext_resource type="Script" uid="uid://cmklgd4wigpu3" path="res://scenes/control.gd" id="1_tbgi4"]
+[ext_resource type="Shader" uid="uid://b88ub0qlpv8j1" path="res://shaders/Risograph.gdshader" id="2_tefeu"]
+[ext_resource type="PackedScene" uid="uid://byakrgga62olw" path="res://scenes/test_cube.tscn" id="3_o6xl0"]
+[ext_resource type="Material" uid="uid://ip2ciu8p1qcn" path="res://materials/groups/grp_ground_dark.tres" id="4_85g3d"]
+[ext_resource type="Material" uid="uid://lh62ax2ysuyo" path="res://materials/groups/grp_ground.tres" id="5_choun"]
+[ext_resource type="Material" uid="uid://by8v0xjq5pxum" path="res://materials/groups/grp_player.tres" id="6_ya4ey"]
+[ext_resource type="Material" uid="uid://ble37u6gcbcx6" path="res://materials/groups/grp_resource.tres" id="7_eb6dy"]
+[ext_resource type="Material" uid="uid://uhal7v5bleq3" path="res://materials/groups/grp_ornament.tres" id="8_trceg"]
+[ext_resource type="Material" uid="uid://dwke5xcgw3ux5" path="res://materials/groups/grp_ui.tres" id="9_a8y0u"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0xm2m"]
+shader = ExtResource("2_tefeu")
+shader_parameter/ink_A = Vector3(0.89, 0.8, 0)
+shader_parameter/ink_B = Vector3(0.05, 0.56, 0.78)
+shader_parameter/ink_C = Vector3(0.96, 0.39, 0.73)
+shader_parameter/ink_D = Vector3(0.1, 0.7, 0.6)
+shader_parameter/ink_E = Vector3(0.9, 0.3, 0.6)
+shader_parameter/background = Vector3(0.914, 0.882, 0.804)
+shader_parameter/face_threshold = 0.6
+shader_parameter/ink_A_density_top = 0.35
+shader_parameter/ink_A_density_bot = 3.55
+shader_parameter/ink_B_density_top = 2.24
+shader_parameter/ink_B_density_bot = 1.67
+shader_parameter/ink_C_density_top = 1.48
+shader_parameter/ink_C_density_bot = 1.41
+shader_parameter/ink_D_density_top = 1.0
+shader_parameter/ink_D_density_bot = 1.0
+shader_parameter/ink_E_density_top = 1.0
+shader_parameter/ink_E_density_bot = 1.0
+shader_parameter/stipple_mode = 1
+shader_parameter/stipple_scale = 800.0
+shader_parameter/stipple_size = 0.025
+shader_parameter/stipple_softness = 0.16
+shader_parameter/stipple_jitter = 0.345
+shader_parameter/offset_A_px = Vector2(2, -2)
+shader_parameter/offset_B_px = Vector2(-1, 0)
+shader_parameter/offset_C_px = Vector2(1, 0)
+shader_parameter/offset_D_px = Vector2(0, 1)
+shader_parameter/offset_E_px = Vector2(-2, 1)
+shader_parameter/screen_size = Vector2(1920, 1080)
+shader_parameter/paper_grain_amount = 0.0
+shader_parameter/paper_grain_size = 0.0
+
+[sub_resource type="Environment" id="Environment_7dm0k"]
+background_mode = 1
+background_color = Color(1, 1, 1, 1)
+
+[node name="Control" type="Control" unique_id=1496771753]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tbgi4")
+
+[node name="RisoViewport" type="SubViewportContainer" parent="." unique_id=1668365344]
+material = SubResource("ShaderMaterial_0xm2m")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="RisoViewport" unique_id=611600441]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="RisoViewport/SubViewport" unique_id=464153497]
+transform = Transform3D(0.7071068, -0.40860704, 0.5770964, 0, 0.8161376, 0.5778576, -0.7071068, -0.40860704, 0.5770964, 30, 20, 20)
+projection = 1
+current = true
+size = 15.0
+near = 0.001
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="RisoViewport/SubViewport" unique_id=1894928017]
+environment = SubResource("Environment_7dm0k")
+
+[node name="testCube" parent="RisoViewport/SubViewport" unique_id=1496996747 instance=ExtResource("3_o6xl0")]
+
+[node name="testCube2" parent="RisoViewport/SubViewport" unique_id=1822523920 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="testCube3" parent="RisoViewport/SubViewport" unique_id=1974777330 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+
+[node name="testCube5" parent="RisoViewport/SubViewport" unique_id=421721553 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0)
+
+[node name="testCube4" parent="RisoViewport/SubViewport" unique_id=368932816 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 16, 0, 0)
+
+[node name="testCube6" parent="RisoViewport/SubViewport" unique_id=688803756 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 20, 0, 0)
+
+[node name="GroupMapViewport" type="SubViewportContainer" parent="." unique_id=354828322]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="GroupMapViewport" unique_id=2000168690]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="GroupMapViewport/SubViewport" unique_id=787602848]
+transform = Transform3D(0.7071068, -0.40860704, 0.5770964, 0, 0.8161376, 0.5778576, -0.7071068, -0.40860704, 0.5770964, 30, 20, 20)
+projection = 1
+current = true
+size = 15.0
+near = 0.001
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="GroupMapViewport/SubViewport" unique_id=719223279]
+environment = SubResource("Environment_7dm0k")
+
+[node name="testCube" parent="GroupMapViewport/SubViewport" unique_id=1284561567 instance=ExtResource("3_o6xl0")]
+
+[node name="Cube" parent="GroupMapViewport/SubViewport/testCube" index="0" unique_id=1439297259]
+material_override = ExtResource("4_85g3d")
+surface_material_override/0 = null
+
+[node name="testCube2" parent="GroupMapViewport/SubViewport" unique_id=888238536 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="Cube" parent="GroupMapViewport/SubViewport/testCube2" index="0" unique_id=1439297259]
+material_override = ExtResource("5_choun")
+surface_material_override/0 = null
+
+[node name="testCube3" parent="GroupMapViewport/SubViewport" unique_id=364307594 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
+
+[node name="Cube" parent="GroupMapViewport/SubViewport/testCube3" index="0" unique_id=1439297259]
+material_override = ExtResource("6_ya4ey")
+
+[node name="testCube5" parent="GroupMapViewport/SubViewport" unique_id=821666598 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0)
+
+[node name="Cube" parent="GroupMapViewport/SubViewport/testCube5" index="0" unique_id=1439297259]
+material_override = ExtResource("7_eb6dy")
+
+[node name="testCube4" parent="GroupMapViewport/SubViewport" unique_id=791203987 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 16, 0, 0)
+
+[node name="Cube" parent="GroupMapViewport/SubViewport/testCube4" index="0" unique_id=1439297259]
+material_override = ExtResource("8_trceg")
+
+[node name="testCube6" parent="GroupMapViewport/SubViewport" unique_id=529240623 instance=ExtResource("3_o6xl0")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 20, 0, 0)
+
+[node name="Cube" parent="GroupMapViewport/SubViewport/testCube6" index="0" unique_id=1439297259]
+material_override = ExtResource("9_a8y0u")
+
+[editable path="RisoViewport/SubViewport/testCube"]
+[editable path="GroupMapViewport/SubViewport/testCube"]
+[editable path="GroupMapViewport/SubViewport/testCube2"]
+[editable path="GroupMapViewport/SubViewport/testCube3"]
+[editable path="GroupMapViewport/SubViewport/testCube5"]
+[editable path="GroupMapViewport/SubViewport/testCube4"]
+[editable path="GroupMapViewport/SubViewport/testCube6"]

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cvmla57ojjqku"]
+
+[ext_resource type="PackedScene" uid="uid://2ymi75ey0hmf" path="res://assets/zappyLogo_test.glb" id="1_t1w3d"]
+[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_28b5y"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hvt55"]
+render_priority = 0
+shader = ExtResource("2_28b5y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qxs5l"]
+render_priority = 0
+shader = ExtResource("2_28b5y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_453f5"]
+render_priority = 0
+shader = ExtResource("2_28b5y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_afvug"]
+render_priority = 0
+shader = ExtResource("2_28b5y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3evr5"]
+render_priority = 0
+shader = ExtResource("2_28b5y")
+
+[node name="zappyLogo_test" unique_id=1815350000 instance=ExtResource("1_t1w3d")]
+
+[node name="Cube" parent="." index="0" unique_id=2033684389]
+surface_material_override/0 = SubResource("ShaderMaterial_hvt55")
+
+[node name="Cube_001" parent="." index="1" unique_id=20213941]
+surface_material_override/0 = SubResource("ShaderMaterial_qxs5l")
+
+[node name="Cube_003" parent="." index="2" unique_id=1761728095]
+surface_material_override/0 = SubResource("ShaderMaterial_453f5")
+
+[node name="Cube_004" parent="." index="3" unique_id=703958136]
+surface_material_override/0 = SubResource("ShaderMaterial_afvug")
+
+[node name="Cube_002" parent="." index="4" unique_id=921802895]
+surface_material_override/0 = SubResource("ShaderMaterial_3evr5")
