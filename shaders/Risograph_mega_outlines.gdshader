@@ -1,7 +1,5 @@
 shader_type canvas_item;
 
-uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
-
 // ── Palette ─────────────────────────────────────────────────────────────────
 uniform vec3 ink1 = vec3(1.0,  0.15, 0.3);   // red
 uniform vec3 ink2 = vec3(0.55, 0.1,  0.8);   // purple
@@ -21,18 +19,14 @@ uniform float ink_opacity      = 0.92;
 // ── Density ──────────────────────────────────────────────────────────────────
 uniform float density_dark  = 1.0;
 uniform float density_light = 0.45;
-
-// Noise-mode density scalar — pull back noise coverage independently
 uniform float noise_density_scale = 0.9;
-
-// Crossover: below → halftone, above → noise
 uniform float noise_threshold       = 0.65;
-uniform float noise_threshold_blend = 0.08; // lower = sharper handoff
+uniform float noise_threshold_blend = 0.08;
 
 // ── Halftone irregularity ────────────────────────────────────────────────────
-uniform float dot_size_variation    = 0.35; // per-dot size randomness
-uniform float dot_opacity_variation = 0.25; // per-dot opacity randomness
-uniform float dot_shape_variation   = 0.2;  // per-dot ellipse squish
+uniform float dot_size_variation    = 0.35;
+uniform float dot_opacity_variation = 0.25;
+uniform float dot_shape_variation   = 0.2;
 
 // ── Paper ────────────────────────────────────────────────────────────────────
 uniform float paper_grain_amount = 0.03;
@@ -43,6 +37,16 @@ uniform vec2 offset_top_px   = vec2(3.0,  -3.0);
 uniform vec2 offset_left_px  = vec2(-1.0,  0.0);
 uniform vec2 offset_right_px = vec2( 1.0,  0.0);
 uniform vec2 screen_size     = vec2(1920.0, 1080.0);
+
+// ── Outline ──────────────────────────────────────────────────────────────────
+// Set outline_color = background to get "fall through to paper" effect
+uniform vec3  outline_color     = vec3(0.15, 0.1, 0.12); // dark ink default
+uniform float outline_thickness = 1.5;   // pixels
+uniform float outline_strength  = 0.85;  // opacity of the line (0-1)
+uniform float outline_wobble    = 0.4;   // how much the edge wanders (0=clean)
+uniform float outline_wobble_scale = 300.0; // frequency of wobble noise
+
+uniform sampler2D screen_tex : hint_screen_texture, filter_linear_mipmap;
 
 // ── Detection ────────────────────────────────────────────────────────────────
 bool is_red(vec3 c)        { return c.r > c.g * 2.0 && c.r > c.b * 2.0 && c.r > 0.15; }
@@ -58,7 +62,7 @@ float noise(vec2 uv) {
     return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-// ── Mode A: multi-octave noise — high density ─────────────────────────────────
+// ── Mode A: multi-octave noise ───────────────────────────────────────────────
 float ink_noise(vec2 uv) {
     vec2 suv = uv * stipple_scale / stipple_size;
     float a  = noise(suv);
@@ -76,24 +80,21 @@ float noise_hit(vec2 uv, float density) {
     return smoothstep((1.0 - d) - edge, (1.0 - d) + edge, pattern);
 }
 
-// ── Mode B: irregular jittered halftone dots — low density ───────────────────
+// ── Mode B: irregular jittered halftone dots ─────────────────────────────────
 float halftone_hit(vec2 uv, float density) {
     float cell   = stipple_scale / stipple_size;
     vec2 scaled  = uv * cell;
     vec2 cell_id = floor(scaled);
     vec2 cell_uv = fract(scaled) - 0.5;
 
-    // Position jitter
     vec2 jitter = vec2(
         noise(cell_id) - 0.5,
         noise(cell_id + vec2(7.3, 4.1)) - 0.5
     ) * stipple_jitter;
 
-    // Per-dot size variation
     float size_rand = noise(cell_id + vec2(13.7, 2.3));
     float size_mult = 1.0 + (size_rand - 0.5) * 2.0 * dot_size_variation;
 
-    // Per-dot shape: random ellipse squish + rotation
     float shape_rand = noise(cell_id + vec2(3.1, 17.9));
     float squish     = 1.0 + (shape_rand - 0.5) * 2.0 * dot_shape_variation;
     float rot_angle  = shape_rand * 3.14159;
@@ -106,7 +107,6 @@ float halftone_hit(vec2 uv, float density) {
     float dot    = 1.0 - smoothstep(radius - stipple_softness,
                                      radius + stipple_softness, dist);
 
-    // Per-dot opacity variation
     float opacity_rand = noise(cell_id + vec2(29.1, 8.7));
     float opacity_mult = 1.0 + (opacity_rand - 0.5) * 2.0 * dot_opacity_variation;
     dot *= clamp(opacity_mult, 0.0, 1.0);
@@ -114,7 +114,7 @@ float halftone_hit(vec2 uv, float density) {
     return clamp(dot, 0.0, 1.0);
 }
 
-// ── Combined ─────────────────────────────────────────────────────────────────
+// ── Combined hit ─────────────────────────────────────────────────────────────
 float get_hit(vec2 uv, float density) {
     float h = halftone_hit(uv, density);
     float n = noise_hit(uv, density);
@@ -133,17 +133,50 @@ vec3 apply_ink(vec3 base, vec3 ink_color, float hit) {
     return mix(base, ink_color, hit * ink_opacity);
 }
 
+// ── Edge detection ───────────────────────────────────────────────────────────
+// Sobel on raw source texture — catches silhouette AND internal face edges.
+// Wobble displaces the sample UV slightly per-pixel for hand-printed feel.
+float edge_strength(vec2 uv) {
+    vec2 px = 1.0 / screen_size;
+    float t = outline_thickness;
+
+    // Wobble: nudge the sample position using low-freq noise
+    vec2 wobble_uv = uv * outline_wobble_scale;
+    float wx = (noise(wobble_uv)              - 0.5) * 2.0;
+    float wy = (noise(wobble_uv + vec2(4.7, 9.1)) - 0.5) * 2.0;
+    vec2 wobble_offset = vec2(wx, wy) * px * outline_wobble;
+
+    vec2 suv = uv + wobble_offset;
+
+    // 3x3 Sobel kernel samples
+    vec3 s00 = texture(screen_tex, suv + vec2(-t, -t) * px).rgb;
+    vec3 s10 = texture(screen_tex, suv + vec2( 0, -t) * px).rgb;
+    vec3 s20 = texture(screen_tex, suv + vec2( t, -t) * px).rgb;
+    vec3 s01 = texture(screen_tex, suv + vec2(-t,  0) * px).rgb;
+    vec3 s21 = texture(screen_tex, suv + vec2( t,  0) * px).rgb;
+    vec3 s02 = texture(screen_tex, suv + vec2(-t,  t) * px).rgb;
+    vec3 s12 = texture(screen_tex, suv + vec2( 0,  t) * px).rgb;
+    vec3 s22 = texture(screen_tex, suv + vec2( t,  t) * px).rgb;
+
+    // Sobel X and Y gradients (luminance-based)
+    vec3 gx = -s00 - 2.0*s01 - s02 + s20 + 2.0*s21 + s22;
+    vec3 gy = -s00 - 2.0*s10 - s20 + s02 + 2.0*s12 + s22;
+
+    float grad = length(gx) + length(gy);
+    return clamp(grad, 0.0, 1.0);
+}
+
 // ── Fragment ─────────────────────────────────────────────────────────────────
 void fragment() {
-    vec3 pixel_base = texture(TEXTURE, UV).rgb;
+    vec3 pixel_base = texture(screen_tex, UV).rgb;
 
     vec2 off_top   = offset_top_px   / screen_size;
     vec2 off_left  = offset_left_px  / screen_size;
     vec2 off_right = offset_right_px / screen_size;
 
-    vec3 pixel_top   = texture(TEXTURE, UV + off_top).rgb;
-    vec3 pixel_left  = texture(TEXTURE, UV + off_left).rgb;
-    vec3 pixel_right = texture(TEXTURE, UV + off_right).rgb;
+    vec3 pixel_top   = texture(screen_tex, UV + off_top).rgb;
+    vec3 pixel_left  = texture(screen_tex, UV + off_left).rgb;
+    vec3 pixel_right = texture(screen_tex, UV + off_right).rgb;
 
     vec3 final_color;
 
@@ -176,6 +209,14 @@ void fragment() {
         if (has_1) { final_color = apply_ink(final_color, ink1, hit1); }
     }
 
+    // ── Outline pass — runs on every pixel including background ───────────────
+    // This means edges are visible even where geometry meets paper.
+    float edge = edge_strength(UV);
+    // Threshold with a little smoothing so the line isn't aliased
+    float edge_mask = smoothstep(0.3, 0.6, edge) * outline_strength;
+    final_color = mix(final_color, outline_color, edge_mask);
+
+    // ── Paper grain ───────────────────────────────────────────────────────────
     float paper_noise = noise(UV * paper_grain_size + vec2(7.3, 4.1));
     final_color += vec3((paper_noise - 0.5) * paper_grain_amount);
 

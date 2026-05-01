@@ -1,7 +1,15 @@
 [gd_scene format=3 uid="uid://mf5v201sw7hw"]
 
 [ext_resource type="PackedScene" uid="uid://c6up55p6v7hgx" path="res://assets/testCube_RED.glb" id="1_675cy"]
+[ext_resource type="Shader" uid="uid://d3t2yqqowbe5g" path="res://shaders/RisoOutline.gdshader" id="2_45uwd"]
 [ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_ycais"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ko6un"]
+render_priority = 1
+shader = ExtResource("2_45uwd")
+shader_parameter/outline_color = Color(0, 1, 0, 1)
+shader_parameter/outline_width = 8.0
+shader_parameter/bg_threshold = 0.92
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u2aih"]
 render_priority = 0
@@ -9,5 +17,6 @@ shader = ExtResource("2_ycais")
 
 [node name="testCube_RED" unique_id=2036546383 instance=ExtResource("1_675cy")]
 
-[node name="CubeRED" parent="." index="0" unique_id=2083635302]
+[node name="CubeRED" parent="." index="0" unique_id=2124492690]
+material_overlay = SubResource("ShaderMaterial_ko6un")
 surface_material_override/0 = SubResource("ShaderMaterial_u2aih")

@@ -1,13 +1,17 @@
 [gd_scene format=3 uid="uid://dbxjh3enqj63u"]
 
 [ext_resource type="PackedScene" uid="uid://c3eyod1fg8oer" path="res://assets/testCube_GREEN.glb" id="1_0lnim"]
-[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_nj2pm"]
+[ext_resource type="Shader" uid="uid://d3t2yqqowbe5g" path="res://shaders/RisoOutline.gdshader" id="2_s3xff"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o10uk"]
-render_priority = 0
-shader = ExtResource("2_nj2pm")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xis7g"]
+render_priority = 1
+shader = ExtResource("2_s3xff")
+shader_parameter/outline_color = Color(0.96857667, 0.9593466, 0.9452769, 1)
+shader_parameter/outline_width = 8.0
+shader_parameter/bg_threshold = 0.92
 
-[node name="testCube_GREEN" unique_id=1263901913 instance=ExtResource("1_0lnim")]
+[node name="testCube_GREEN" unique_id=16015981 instance=ExtResource("1_0lnim")]
 
-[node name="CubeBLUE" parent="." index="0" unique_id=1774279800]
-surface_material_override/0 = SubResource("ShaderMaterial_o10uk")
+[node name="CubeGREEN" parent="." index="0" unique_id=1948009828]
+layers = 2
+material_overlay = SubResource("ShaderMaterial_xis7g")
