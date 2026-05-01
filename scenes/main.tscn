@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://70iybpd0os4l"]
 
-[ext_resource type="Script" uid="uid://cmklgd4wigpu3" path="res://control.gd" id="1_h2yge"]
-[ext_resource type="Shader" uid="uid://byt2hhwue06qa" path="res://Risograph_mega_2.gdshader" id="2_272bh"]
-[ext_resource type="PackedScene" uid="uid://c6up55p6v7hgx" path="res://testCube_RED.glb" id="3_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://dbxjh3enqj63u" path="res://test_cube_green.tscn" id="4_7mycd"]
-[ext_resource type="PackedScene" uid="uid://cy1t0lsk277xv" path="res://testCube_RED_DARK.glb" id="4_lquwl"]
-[ext_resource type="PackedScene" uid="uid://cuxcbglrml6lf" path="res://test_cube_green_dark.tscn" id="6_7mycd"]
-[ext_resource type="PackedScene" path="res://test_cube.tscn" id="7_272bh"]
+[ext_resource type="Script" uid="uid://cmklgd4wigpu3" path="res://scenes/control.gd" id="1_h2yge"]
+[ext_resource type="Shader" uid="uid://byt2hhwue06qa" path="res://shaders/Risograph_mega_2.gdshader" id="2_272bh"]
+[ext_resource type="PackedScene" uid="uid://c6up55p6v7hgx" path="res://assets/testCube_RED.glb" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://dbxjh3enqj63u" path="res://scenes/test_cube_green.tscn" id="4_7mycd"]
+[ext_resource type="PackedScene" uid="uid://cy1t0lsk277xv" path="res://assets/testCube_RED_DARK.glb" id="4_lquwl"]
+[ext_resource type="PackedScene" uid="uid://cuxcbglrml6lf" path="res://scenes/test_cube_green_dark.tscn" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://byakrgga62olw" path="res://scenes/test_cube.tscn" id="7_272bh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0xm2m"]
 shader = ExtResource("2_272bh")
@@ -75,63 +75,63 @@ near = 0.001
 [node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport" unique_id=1894928017]
 environment = SubResource("Environment_7dm0k")
 
-[node name="testCube_RED" parent="SubViewportContainer/SubViewport" unique_id=2036546383 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED" parent="SubViewportContainer/SubViewport" unique_id=1831839964 instance=ExtResource("3_1bvp3")]
 
-[node name="testCube_RED_DARK" parent="SubViewportContainer/SubViewport" unique_id=1378126929 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK" parent="SubViewportContainer/SubViewport" unique_id=759061680 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
 
-[node name="testCube_RED6" parent="SubViewportContainer/SubViewport" unique_id=904224049 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED6" parent="SubViewportContainer/SubViewport" unique_id=1937143749 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4)
 
-[node name="testCube_RED_DARK6" parent="SubViewportContainer/SubViewport" unique_id=865442502 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK6" parent="SubViewportContainer/SubViewport" unique_id=1716001841 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -4)
 
-[node name="testCube_RED2" parent="SubViewportContainer/SubViewport" unique_id=440049319 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED2" parent="SubViewportContainer/SubViewport" unique_id=1762550481 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
 
-[node name="testCube_RED_DARK2" parent="SubViewportContainer/SubViewport" unique_id=348619248 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK2" parent="SubViewportContainer/SubViewport" unique_id=255521336 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
 
-[node name="testCube_RED_DARK3" parent="SubViewportContainer/SubViewport" unique_id=1940806227 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK3" parent="SubViewportContainer/SubViewport" unique_id=1704826382 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="testCube_RED7" parent="SubViewportContainer/SubViewport" unique_id=1810449651 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED7" parent="SubViewportContainer/SubViewport" unique_id=1105691211 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 0)
 
-[node name="testCube_RED8" parent="SubViewportContainer/SubViewport" unique_id=843821856 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED8" parent="SubViewportContainer/SubViewport" unique_id=474543369 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -4)
 
-[node name="testCube_RED_DARK7" parent="SubViewportContainer/SubViewport" unique_id=1353551460 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK7" parent="SubViewportContainer/SubViewport" unique_id=298378139 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -2)
 
-[node name="testCube_RED3" parent="SubViewportContainer/SubViewport" unique_id=155431704 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED3" parent="SubViewportContainer/SubViewport" unique_id=783464333 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
 
-[node name="testCube_RED_DARK8" parent="SubViewportContainer/SubViewport" unique_id=640152138 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK8" parent="SubViewportContainer/SubViewport" unique_id=2062678207 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
 
-[node name="testCube_RED_DARK9" parent="SubViewportContainer/SubViewport" unique_id=2055014709 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK9" parent="SubViewportContainer/SubViewport" unique_id=158605453 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -4)
 
-[node name="testCube_RED9" parent="SubViewportContainer/SubViewport" unique_id=909168180 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED9" parent="SubViewportContainer/SubViewport" unique_id=904211833 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -2)
 
-[node name="testCube_RED_DARK5" parent="SubViewportContainer/SubViewport" unique_id=363314830 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK5" parent="SubViewportContainer/SubViewport" unique_id=357178040 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
 
-[node name="testCube_RED5" parent="SubViewportContainer/SubViewport" unique_id=992343124 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED5" parent="SubViewportContainer/SubViewport" unique_id=1483807991 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -2)
 
-[node name="testCube_RED_DARK4" parent="SubViewportContainer/SubViewport" unique_id=1745090180 instance=ExtResource("4_lquwl")]
+[node name="testCube_RED_DARK4" parent="SubViewportContainer/SubViewport" unique_id=636961014 instance=ExtResource("4_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -4)
 
-[node name="testCube_RED4" parent="SubViewportContainer/SubViewport" unique_id=1722513338 instance=ExtResource("3_1bvp3")]
+[node name="testCube_RED4" parent="SubViewportContainer/SubViewport" unique_id=1506438191 instance=ExtResource("3_1bvp3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -4)
 
 [node name="testCube_GREEN" parent="SubViewportContainer/SubViewport" unique_id=1263901913 instance=ExtResource("4_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -2)
 
-[node name="testCube_GREEN_DARK" parent="SubViewportContainer/SubViewport" unique_id=2003704770 instance=ExtResource("6_7mycd")]
+[node name="testCube_GREEN_DARK" parent="SubViewportContainer/SubViewport" unique_id=611327166 instance=ExtResource("6_7mycd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
 
 [node name="testCube" parent="SubViewportContainer/SubViewport" unique_id=1496996747 instance=ExtResource("7_272bh")]

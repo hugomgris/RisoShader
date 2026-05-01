@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://mf5v201sw7hw"]
 
-[ext_resource type="PackedScene" uid="uid://c6up55p6v7hgx" path="res://testCube_RED.glb" id="1_675cy"]
-[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://BaseMeshColor.gdshader" id="2_ycais"]
+[ext_resource type="PackedScene" uid="uid://c6up55p6v7hgx" path="res://assets/testCube_RED.glb" id="1_675cy"]
+[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_ycais"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u2aih"]
 render_priority = 0

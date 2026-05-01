@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dyqs1xsuoyj0e"
-path="res://.godot/imported/testCubeCMY.glb-29a461451c65cc01b447cbf36fa9362f.scn"
+uid="uid://donibadbwhuns"
+path="res://.godot/imported/testCube_GREEN_DARK.glb-84d14a2e1db25df2eec1289ace4e3272.scn"
 
 [deps]
 
-source_file="res://testCubeCMY.glb"
-dest_files=["res://.godot/imported/testCubeCMY.glb-29a461451c65cc01b447cbf36fa9362f.scn"]
+source_file="res://assets/testCube_GREEN_DARK.glb"
+dest_files=["res://.godot/imported/testCube_GREEN_DARK.glb-84d14a2e1db25df2eec1289ace4e3272.scn"]
 
 [params]
 
