@@ -30,6 +30,9 @@ uniform float ink_opacity      = 0.92;
 uniform float paper_grain_amount = 0.03;
 uniform float paper_grain_size   = 0.8;
 
+uniform float density_dark  = 1.0;   // ink density for darkest variant
+uniform float density_light = 0.55;  // ink density for brightest variant
+
 // Misregistration
 uniform vec2 offset_top_px   = vec2(3.0, -3.0);
 uniform vec2 offset_left_px  = vec2(-1.0, 0.0);
@@ -37,12 +40,12 @@ uniform vec2 offset_right_px = vec2(1.0, 0.0);
 uniform vec2 screen_size     = vec2(1152.0, 648.0);
 
 // --- Detection helpers ---
-bool is_red(vec3 c)     { return c.r > red_threshold   && c.g < green_threshold && c.b < blue_threshold; }
-bool is_green(vec3 c)   { return c.g > red_threshold   && c.r < green_threshold && c.b < blue_threshold; }
-bool is_blue(vec3 c)    { return c.b > red_threshold   && c.r < green_threshold && c.g < blue_threshold; }
-bool is_cyan(vec3 c)    { return c.g > red_threshold   && c.b > red_threshold   && c.r < green_threshold; }
-bool is_magenta(vec3 c) { return c.r > red_threshold   && c.b > red_threshold   && c.g < green_threshold; }
-bool is_yellow(vec3 c)  { return c.r > red_threshold   && c.g > red_threshold   && c.b < green_threshold; }
+bool is_red(vec3 c)     { return c.r > c.g * 2.0 && c.r > c.b * 2.0 && c.r > 0.15; }
+bool is_green(vec3 c)   { return c.g > c.r * 2.0 && c.g > c.b * 2.0 && c.g > 0.15; }
+bool is_blue(vec3 c)    { return c.b > c.r * 2.0 && c.b > c.g * 2.0 && c.b > 0.15; }
+bool is_cyan(vec3 c)    { return c.g > c.r * 2.0 && c.b > c.r * 2.0 && c.g > 0.15; }
+bool is_magenta(vec3 c) { return c.r > c.g * 2.0 && c.b > c.g * 2.0 && c.r > 0.15; }
+bool is_yellow(vec3 c)  { return c.r > c.b * 2.0 && c.g > c.b * 2.0 && c.r > 0.15; }
 bool is_background(vec3 c) { return c.r > 0.9 && c.g > 0.9 && c.b > 0.9; }
 
 float noise(vec2 uv) {
@@ -91,6 +94,35 @@ float get_hit(vec2 uv) {
     else return halftone(uv);
 }
 
+float halftone_density(vec2 uv, float density) {
+    float cell    = stipple_scale / stipple_size;
+    vec2 scaled   = uv * cell;
+    vec2 cell_id  = floor(scaled);
+    vec2 cell_uv  = fract(scaled) - 0.5;
+    vec2 jitter_offset = vec2(
+        noise(cell_id) - 0.5,
+        noise(cell_id + vec2(7.3, 4.1)) - 0.5
+    ) * stipple_jitter;
+    float dist   = length(cell_uv - jitter_offset);
+    float radius = sqrt(stipple_density * density) * 0.5;  // <-- density scales radius
+    return 1.0 - smoothstep(radius - stipple_softness,
+                             radius + stipple_softness, dist);
+}
+
+float stipple_hit_noise_density(float pattern, float density) {
+    float effective = stipple_density * density;
+    if (effective >= 1.0) return 1.0;
+    if (effective <= 0.0) return 0.0;
+    float edge = stipple_softness * 0.5;
+    return smoothstep((1.0 - effective) - edge,
+                      (1.0 - effective) + edge, pattern);
+}
+
+float get_hit_density(vec2 uv, float density) {
+    if (stipple_mode == 0) return stipple_hit_noise_density(stipple_noise(uv), density);
+    else return halftone_density(uv, density);
+}
+
 void fragment() {
     vec3 pixel_base = texture(TEXTURE, UV).rgb;
 
@@ -107,7 +139,6 @@ void fragment() {
     if (is_background(pixel_base)) {
         final_color = background;
     } else {
-        // Detect all 6 ink IDs from offset samples
         bool has_1 = is_red(pixel_top)     || is_red(pixel_left)     || is_red(pixel_right);
         bool has_2 = is_green(pixel_top)   || is_green(pixel_left)   || is_green(pixel_right);
         bool has_3 = is_blue(pixel_top)    || is_blue(pixel_left)    || is_blue(pixel_right);
@@ -115,13 +146,18 @@ void fragment() {
         bool has_5 = is_magenta(pixel_top) || is_magenta(pixel_left) || is_magenta(pixel_right);
         bool has_6 = is_yellow(pixel_top)  || is_yellow(pixel_left)  || is_yellow(pixel_right);
 
-        // Independent stipple per ink drum — 6 patterns at different angles
-        float hit1 = get_hit(rotate_uv(UV, 0.0));
-        float hit2 = get_hit(rotate_uv(UV, 0.261));
-        float hit3 = get_hit(rotate_uv(UV, 0.523));
-        float hit4 = get_hit(rotate_uv(UV, 0.785));
-        float hit5 = get_hit(rotate_uv(UV, 1.047));
-        float hit6 = get_hit(rotate_uv(UV, 1.309));
+        // Brightness of the source pixel drives stipple density
+        // Full saturated color = 1.0, darkened variant = less coverage
+		
+		float dominant = max(pixel_base.r, max(pixel_base.g, pixel_base.b));
+		float density_mult = mix(density_dark, density_light, dominant);
+
+        float hit1 = get_hit_density(rotate_uv(UV, 0.0),   density_mult);
+        float hit2 = get_hit_density(rotate_uv(UV, 0.261), density_mult);
+        float hit3 = get_hit_density(rotate_uv(UV, 0.523), density_mult);
+        float hit4 = get_hit_density(rotate_uv(UV, 0.785), density_mult);
+        float hit5 = get_hit_density(rotate_uv(UV, 1.047), density_mult);
+        float hit6 = get_hit_density(rotate_uv(UV, 1.309), density_mult);
 
         vec3  ink_accum    = vec3(0.0);
         float weight_total = 0.0;
