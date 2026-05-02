@@ -1,0 +1,76 @@
+[gd_scene format=4 uid="uid://hp73opek1esv"]
+
+[ext_resource type="PackedScene" uid="uid://cakjxj635s50u" path="res://assets/testCube_RED_EDGES.glb" id="1_gp65s"]
+[ext_resource type="Shader" uid="uid://d3t2yqqowbe5g" path="res://shaders/RisoOutline.gdshader" id="2_k1mrq"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k1mrq"]
+render_priority = 0
+shader = ExtResource("2_k1mrq")
+shader_parameter/outline_color = Color(0.96857667, 0.9593466, 0.9499975, 1)
+shader_parameter/outline_width = 15.0
+shader_parameter/bg_threshold = 0.92
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iaqw0"]
+resource_name = "Material"
+cull_mode = 2
+vertex_color_use_as_albedo = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_7xbfv"]
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAwACAAEAAAAEAAEAAwAFAAIABQAAAAIABgAEAAAABQAGAAAABwABAAQABwADAAEABgAHAAQABQADAAcABQAHAAYA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAAAA//8AAAAAAAAAAP//AAD///////8AAAAAAAAAAAAA//8AAAAAAAD//wAA//8AAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_k1mrq"]
+resource_name = "testCube_RGB_DARK_Cube_007"
+_surfaces = [{
+"aabb": AABB(-1, -1, -1, 2, 2, 2),
+"attribute_data": PackedByteArray("CAAA//+f/38IAAD//9//PwgAAP//3/9/CAAA//+f/z8AAAj//1//PwAACP//nwAAAAAI//+f/z8AAAj//18AAAAIAP//X///AAgA//+f/78ACAD//5///wAIAP//X/+/CAAA//8f/38IAAD//1//PwgAAP//X/9/CAAA//8f/z8ACAD//1//fwAIAP//n/8/AAgA//+f/38ACAD//1//PwAACP//X/+/AAAI//+f/38AAAj//5//vwAACP//X/9/"),
+"format": 34896613407,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_iaqw0"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("/////wAA//8AAP///////wAA//8AAP///////////////wAA////vwAA//////+//////////78AAAAA////vwAAAAD//1TVAAD//wAAVNUAAP////9U1QAAAAAAAFTVAAAAAAAA/7///wAA////v///AAAAAP+/AAAAAP///7///wAAAABU1f///////1TV/////wAAVNX//wAA//9U1QAAAAAAAP///////wAA//8AAP//AAD/////AAAAAP///3//v/9//7//f/+//3//v/////////////////////9U1VTVVNVU1VTVVNVU1VTVAAD/fwAA/38AAP9/AAD/f6oqqiqqKqoqqiqqKqoqqir/v/+//7//v/+//7//v/+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_7xbfv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ouipk"]
+render_priority = 0
+shader = ExtResource("2_k1mrq")
+shader_parameter/outline_color = Color(0.93, 0.91, 0.89, 1)
+shader_parameter/outline_width = 15.0
+shader_parameter/bg_threshold = 0.92
+
+[node name="testCube_RED_EDGES" unique_id=14205761 instance=ExtResource("1_gp65s")]
+
+[node name="CubeRGB_DARK" type="MeshInstance3D" parent="." index="0" unique_id=1438521477]
+transform = Transform3D(0.9999946, 0, -0.0032986663, 0, 1, 0, 0.0032986663, 0, 0.9999946, 0, 0, 0)
+layers = 2
+material_overlay = SubResource("ShaderMaterial_k1mrq")
+mesh = SubResource("ArrayMesh_k1mrq")
+
+[node name="CubeRGB_DARK2" type="MeshInstance3D" parent="." index="1" unique_id=1761922355]
+transform = Transform3D(0.9999946, 0, -0.0032986663, 0, 1, 0, 0.0032986663, 0, 0.9999946, 0, 0, 0)
+material_overlay = SubResource("ShaderMaterial_k1mrq")
+mesh = SubResource("ArrayMesh_k1mrq")
+
+[node name="CubeRGB" parent="." index="2" unique_id=237385705]
+visible = false
+layers = 2
+material_overlay = SubResource("ShaderMaterial_ouipk")
+
+[node name="Outine" parent="." index="3" unique_id=1451064130]
+layers = 2

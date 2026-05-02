@@ -3,12 +3,12 @@ shader_type canvas_item;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_nearest;
 
 // ── Palette ─────────────────────────────────────────────────────────────────
-uniform vec3 ink1 = vec3(.85,  0.15, 0.3);   // red
-uniform vec3 ink2 = vec3(0.1, 0.85,  0.0);   // purple
-uniform vec3 ink3 = vec3(.55,  0.525, 0.65);   // yellow
-uniform vec3 ink4 = vec3(0.2,  0.8,  0.7);   // cyan
-uniform vec3 ink5 = vec3(0.9,  0.2,  0.6);   // magenta
-uniform vec3 ink6 = vec3(0.95, 0.75, 0.1);   // gold
+uniform vec3 ink1 = vec3(.85,  0.15, 0.3);
+uniform vec3 ink2 = vec3(0.1,  0.85, 0.0);
+uniform vec3 ink3 = vec3(.55,  0.525, 0.65);
+uniform vec3 ink4 = vec3(0.2,  0.8,  0.7);
+uniform vec3 ink5 = vec3(0.9,  0.2,  0.6);
+uniform vec3 ink6 = vec3(0.95, 0.75, 0.1);
 uniform vec3 background = vec3(0.93, 0.91, 0.88);
 
 // ── Stipple shared ───────────────────────────────────────────────────────────
@@ -19,35 +19,36 @@ uniform float stipple_jitter   = 0.8;
 uniform float ink_opacity      = 0.85;
 
 // ── Density ──────────────────────────────────────────────────────────────────
-uniform float density_dark  = .9;
-uniform float density_light = 0.6;
-
-// Noise-mode density scalar — pull back noise coverage independently
-uniform float noise_density_scale = 0.9;
-
-// Crossover: below → halftone, above → noise
+uniform float density_dark          = 0.9;
+uniform float density_light         = 0.6;
+uniform float noise_density_scale   = 0.9;
 uniform float noise_threshold       = 0.7;
-uniform float noise_threshold_blend = 0.08; // lower = sharper handoff
+uniform float noise_threshold_blend = 0.08;
 
 // ── Halftone irregularity ────────────────────────────────────────────────────
-uniform float dot_size_variation    = 0.5; // per-dot size randomness
-uniform float dot_opacity_variation = 0.75; // per-dot opacity randomness
-uniform float dot_shape_variation   = 0.9;  // per-dot ellipse squish
+uniform float dot_size_variation    = 0.5;
+uniform float dot_opacity_variation = 0.75;
+uniform float dot_shape_variation   = 0.9;
 
 // ── Paper ────────────────────────────────────────────────────────────────────
 uniform float paper_grain_amount = 0.03;
 uniform float paper_grain_size   = 0.8;
 
 // ── Misregistration ──────────────────────────────────────────────────────────
-uniform vec2 offset_top_px   = vec2(0.0,  0.0);
-uniform vec2 offset_left_px  = vec2(0.0,  0.0);
-uniform vec2 offset_right_px = vec2( 0.0,  0.0);
+uniform vec2 offset_top_px   = vec2(0.0, 0.0);
+uniform vec2 offset_left_px  = vec2(0.0, 0.0);
+uniform vec2 offset_right_px = vec2(0.0, 0.0);
 uniform vec2 screen_size     = vec2(1920.0, 1080.0);
 
 // ── Animation ────────────────────────────────────────────────────────────────
-uniform float anim_speed      = 8.0;   // "frames per second" of the jitter
-uniform float anim_strength   = 0.15;  // how much the noise shifts per frame
-uniform float anim_density_jitter = 0.08; // density wobble amount per frame
+uniform float anim_speed           = 8.0;  // stepped fps for both modes
+uniform float anim_strength        = 0.15; // noise UV shift per frame
+uniform float anim_density_jitter  = 0.08; // density wobble in noise zones
+
+// Halftone animation: how much dot positions/sizes drift per frame
+uniform float halftone_anim_strength     = 0.4;  // dot position drift (0=static)
+uniform float halftone_size_anim         = 0.2;  // dot size pulse per frame
+uniform float halftone_opacity_anim      = 0.15; // dot opacity flicker per frame
 
 // ── Detection ────────────────────────────────────────────────────────────────
 bool is_red(vec3 c)        { return c.r > c.g * 2.0 && c.r > c.b * 2.0 && c.r > 0.15; }
@@ -63,13 +64,9 @@ float noise(vec2 uv) {
     return fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-// ── Mode A: multi-octave noise — high density ─────────────────────────────────
+// ── Mode A: animated multi-octave noise ──────────────────────────────────────
 float ink_noise(vec2 uv) {
-    // Quantize TIME to low-fps steps — gives cel/print choppiness
     float stepped_time = floor(TIME * anim_speed) / anim_speed;
-
-    // Each "frame" gets a different noise offset
-    float frame_seed = noise(vec2(stepped_time * 7.3, stepped_time * 3.1));
     vec2 anim_offset = vec2(
         noise(vec2(stepped_time * 13.7, 0.0)) - 0.5,
         noise(vec2(0.0, stepped_time * 9.4))  - 0.5
@@ -91,24 +88,43 @@ float noise_hit(vec2 uv, float density) {
     return smoothstep((1.0 - d) - edge, (1.0 - d) + edge, pattern);
 }
 
-// ── Mode B: irregular jittered halftone dots — low density ───────────────────
+// ── Mode B: animated irregular halftone dots ──────────────────────────────────
 float halftone_hit(vec2 uv, float density) {
+    float stepped_time = floor(TIME * anim_speed) / anim_speed;
+
+    // Per-frame global jitter seed — different every stepped frame
+    float frame_a = noise(vec2(stepped_time * 17.3, stepped_time * 5.7));
+    float frame_b = noise(vec2(stepped_time * 3.1,  stepped_time * 11.9));
+
     float cell   = stipple_scale / stipple_size;
     vec2 scaled  = uv * cell;
     vec2 cell_id = floor(scaled);
     vec2 cell_uv = fract(scaled) - 0.5;
 
-    // Position jitter
-    vec2 jitter = vec2(
+    // Static per-dot position jitter + animated drift
+    vec2 static_jitter = vec2(
         noise(cell_id) - 0.5,
         noise(cell_id + vec2(7.3, 4.1)) - 0.5
     ) * stipple_jitter;
 
-    // Per-dot size variation
+    // Animated jitter: each dot shifts slightly each frame using
+    // a per-cell seed so neighbouring dots move independently
+    float dot_anim_seed_x = noise(cell_id + vec2(stepped_time * 23.1, 4.4));
+    float dot_anim_seed_y = noise(cell_id + vec2(7.7, stepped_time * 19.3));
+    vec2 anim_jitter = vec2(dot_anim_seed_x - 0.5, dot_anim_seed_y - 0.5)
+                       * halftone_anim_strength / cell;
+
+    vec2 jitter = static_jitter + anim_jitter;
+
+    // Static per-dot size variation
     float size_rand = noise(cell_id + vec2(13.7, 2.3));
     float size_mult = 1.0 + (size_rand - 0.5) * 2.0 * dot_size_variation;
 
-    // Per-dot shape: random ellipse squish + rotation
+    // Animated size pulse — each dot breathes slightly each frame
+    float size_anim_rand = noise(cell_id + vec2(stepped_time * 7.1, stepped_time * 3.3));
+    size_mult += (size_anim_rand - 0.5) * 2.0 * halftone_size_anim;
+
+    // Static per-dot shape
     float shape_rand = noise(cell_id + vec2(3.1, 17.9));
     float squish     = 1.0 + (shape_rand - 0.5) * 2.0 * dot_shape_variation;
     float rot_angle  = shape_rand * 3.14159;
@@ -121,11 +137,15 @@ float halftone_hit(vec2 uv, float density) {
     float dot    = 1.0 - smoothstep(radius - stipple_softness,
                                      radius + stipple_softness, dist);
 
-    // Per-dot opacity variation
+    // Static opacity variation
     float opacity_rand = noise(cell_id + vec2(29.1, 8.7));
     float opacity_mult = 1.0 + (opacity_rand - 0.5) * 2.0 * dot_opacity_variation;
-    dot *= clamp(opacity_mult, 0.0, 1.0);
 
+    // Animated opacity flicker per dot per frame
+    float opacity_anim_rand = noise(cell_id + vec2(stepped_time * 11.3, stepped_time * 6.7));
+    opacity_mult += (opacity_anim_rand - 0.5) * 2.0 * halftone_opacity_anim;
+
+    dot *= clamp(opacity_mult, 0.0, 1.0);
     return clamp(dot, 0.0, 1.0);
 }
 
@@ -174,6 +194,14 @@ void fragment() {
 
         float dominant     = max(pixel_base.r, max(pixel_base.g, pixel_base.b));
         float density_mult = mix(density_dark, density_light, dominant);
+
+        // Animated density wobble — only in noise zones, not halftone zones
+        float stepped_time   = floor(TIME * anim_speed) / anim_speed;
+        float density_wobble = (noise(vec2(stepped_time * 5.1, stepped_time * 8.3)) - 0.5)
+                               * 2.0 * anim_density_jitter;
+        float noise_zone  = smoothstep(noise_threshold - 0.2,
+                                       noise_threshold + 0.2, density_mult);
+        density_mult = clamp(density_mult + density_wobble * noise_zone, 0.0, 1.0);
 
         float hit1 = get_hit(rotate_uv(UV, 0.0),   density_mult);
         float hit2 = get_hit(rotate_uv(UV, 0.261), density_mult);

@@ -2,8 +2,8 @@ shader_type spatial;
 render_mode unshaded;
 
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture;
-uniform vec4  outline_color : source_color = vec4(0.15, 0.1, 0.12, 1.0);
-uniform float outline_width = 2.0;
+uniform vec4  outline_color : source_color = vec4(0.93, 0.91, 0.89, 1.0);
+uniform float outline_width = 8.0;
 
 // Threshold for "is this pixel the white background?"
 // Matches your viewport clear color (white)

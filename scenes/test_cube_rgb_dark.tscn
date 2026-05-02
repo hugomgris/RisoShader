@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ddewk2m4uqp5r"]
+
+[ext_resource type="PackedScene" uid="uid://bdaqh5sw683es" path="res://assets/testCube_RGB_DARK.glb" id="1_o05aq"]
+
+[node name="testCube_RGB_DARK" unique_id=1162693935 instance=ExtResource("1_o05aq")]
+
+[node name="CubeRGB_DARK" parent="." index="0" unique_id=120648071]
+transform = Transform3D(0.9999946, 0, -0.0032986663, 0, 1, 0, 0.0032986663, 0, 0.9999946, 0, 0, 0)
+layers = 2
