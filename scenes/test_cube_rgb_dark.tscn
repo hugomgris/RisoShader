@@ -1,9 +1,48 @@
 [gd_scene format=3 uid="uid://ddewk2m4uqp5r"]
 
 [ext_resource type="PackedScene" uid="uid://bdaqh5sw683es" path="res://assets/testCube_RGB_DARK.glb" id="1_o05aq"]
+[ext_resource type="Shader" uid="uid://c1227viguvowi" path="res://shaders/Risograph_Spatial.gdshader" id="2_o2l3v"]
+[ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="3_2l1or"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2l1or"]
+render_priority = 0
+shader = ExtResource("2_o2l3v")
+shader_parameter/ink_color = Color(0.45503277, 0.32160592, 0.99403197, 1)
+shader_parameter/ink_opacity = 1.0
+shader_parameter/background = Color(1, 1, 1, 1)
+shader_parameter/density_scale = 1.0
+shader_parameter/density_dark = 1.0
+shader_parameter/density_light = 1.0
+shader_parameter/stipple_scale = 1200.0
+shader_parameter/stipple_size = 1.2
+shader_parameter/stipple_softness = 1.15
+shader_parameter/stipple_jitter = 0.8
+shader_parameter/dot_size_variation = 0.5
+shader_parameter/dot_opacity_variation = 0.75
+shader_parameter/dot_shape_variation = 0.9
+shader_parameter/noise_density_scale = 0.9
+shader_parameter/noise_threshold = 0.7
+shader_parameter/noise_threshold_blend = 0.08
+shader_parameter/paper_grain_amount = 0.03
+shader_parameter/paper_grain_size = 0.8
+shader_parameter/screen_angle = 1.205
+shader_parameter/anim_speed = 2.0
+shader_parameter/anim_strength = 0.15
+shader_parameter/anim_density_jitter = 0.08
+shader_parameter/halftone_anim_strength = 0.4
+shader_parameter/halftone_size_anim = 0.2
+shader_parameter/halftone_opacity_anim = 0.15
+shader_parameter/alpha = 1.0
+shader_parameter/uv_offset = Vector2(0, 0)
+shader_parameter/use_screen_uv = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l3u6p"]
+render_priority = 0
+shader = ExtResource("3_2l1or")
 
 [node name="testCube_RGB_DARK" unique_id=1162693935 instance=ExtResource("1_o05aq")]
 
 [node name="CubeRGB_DARK" parent="." index="0" unique_id=120648071]
 transform = Transform3D(0.9999946, 0, -0.0032986663, 0, 1, 0, 0.0032986663, 0, 0.9999946, 0, 0, 0)
-layers = 2
+material_override = SubResource("ShaderMaterial_2l1or")
+surface_material_override/0 = SubResource("ShaderMaterial_l3u6p")

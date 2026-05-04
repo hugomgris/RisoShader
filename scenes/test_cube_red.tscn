@@ -1,65 +1,11 @@
 [gd_scene format=4 uid="uid://mf5v201sw7hw"]
 
 [ext_resource type="PackedScene" uid="uid://c6up55p6v7hgx" path="res://assets/testCube_RED.glb" id="1_675cy"]
-[ext_resource type="Shader" uid="uid://d3t2yqqowbe5g" path="res://shaders/RisoOutline.gdshader" id="2_45uwd"]
 [ext_resource type="Shader" uid="uid://cmfgeenuqroof" path="res://shaders/BaseMeshColor.gdshader" id="2_ycais"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ko6un"]
-render_priority = 1
-shader = ExtResource("2_45uwd")
-shader_parameter/outline_color = Color(0.96857667, 0.9593466, 0.9499975, 1)
-shader_parameter/outline_width = 8.0
-shader_parameter/bg_threshold = 0.92
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_u2aih"]
-render_priority = 0
-shader = ExtResource("2_ycais")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_45uwd"]
-render_priority = 0
-shader = ExtResource("2_45uwd")
-shader_parameter/outline_color = Color(2.6165175, 2.59187, 2.4898992, 1)
-shader_parameter/outline_width = 0.0
-shader_parameter/bg_threshold = 0.92
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1w6cf"]
-resource_name = "Material"
-cull_mode = 2
-vertex_color_use_as_albedo = true
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_4oxw5"]
-_surfaces = [{
-"aabb": AABB(-1, -1, -1, 2, 2, 2),
-"format": 34896613377,
-"index_count": 36,
-"index_data": PackedByteArray("AAABAAIAAwAAAAIAAAAEAAEAAwACAAUABQACAAEABgAAAAMABgADAAUABgAEAAAABQABAAcABgAFAAcABwABAAQABwAEAAYA"),
-"name": "Material",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 8,
-"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAP///////wAA//8AAAAAAAAAAP//AAAAAP//AAD//wAAAAAAAAAAAAAAAAAA//8AAA==")
-}]
-blend_shape_mode = 0
-
-[sub_resource type="ArrayMesh" id="ArrayMesh_nheua"]
-resource_name = "testCube_Cube"
-_surfaces = [{
-"aabb": AABB(-1, -1, -1, 2, 2, 2),
-"attribute_data": PackedByteArray("/gAA//+f/3/+AAD//9//P/4AAP//n/8//gAA///f/38AAP7//1//PwAA/v//nwAAAAD+//9fAAAAAP7//5//PwD/AP//X///AP8A//+f/78A/wD//1//vwD/AP//n////gAA//8f/3/+AAD//1//P/4AAP//H/8//gAA//9f/38A/wD//1//fwD/AP//n/8/AP8A//9f/z8A/wD//5//fwAA/v//X/+/AAD+//+f/38AAP7//1//fwAA/v//n/+/"),
-"format": 34896613407,
-"index_count": 36,
-"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
-"material": SubResource("StandardMaterial3D_1w6cf"),
-"name": "Material",
-"primitive": 3,
-"uv_scale": Vector4(0, 0, 0, 0),
-"vertex_count": 24,
-"vertex_data": PackedByteArray("/////wAAAAAAAP////8AAP///////wAAAAD//wAAAAD//wAA//8AAAAA/////wAAAAAAAP//AAD///////8AAAAAAAD//6oqAAD//wAAqioAAAAAAACqKgAA/////6oqAAAAAAAA/z///wAA////PwAAAAD///8///8AAAAA/z///wAAAACqKv///////6oq//8AAP//qir/////AACqKgAAAAAAAP8//////wAA/z///wAAAAD/PwAA//8AAP8//3//P/9//z//f/8//3//P/+//7//v/+//7//v/+//7+qKqoqqiqqKqoqqiqqKqoq////f////3////9/////f1TVVNVU1VTVVNVU1VTVVNX/////////////////////")
-}]
-blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_4oxw5")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_43ilx"]
 render_priority = 0
 shader = ExtResource("2_ycais")
 
@@ -100,18 +46,16 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_ko6un")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yo84w"]
+albedo_color = Color(0.41032708, 5.8358535e-07, 1.4439226e-07, 1)
+
 [node name="testCube_RED" unique_id=2036546383 instance=ExtResource("1_675cy")]
 
 [node name="CubeRED" parent="." index="0" unique_id=2124492690]
-visible = false
 material_overlay = SubResource("ShaderMaterial_ko6un")
 surface_material_override/0 = SubResource("ShaderMaterial_u2aih")
 
-[node name="Cube" type="MeshInstance3D" parent="." index="1" unique_id=479834689]
-material_overlay = SubResource("ShaderMaterial_45uwd")
-mesh = SubResource("ArrayMesh_nheua")
-surface_material_override/0 = SubResource("ShaderMaterial_43ilx")
-
-[node name="Outine" type="MeshInstance3D" parent="Cube" index="0" unique_id=6307855]
+[node name="Outine" type="MeshInstance3D" parent="CubeRED" index="0" unique_id=6307855]
 transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 0, 0)
 mesh = SubResource("ArrayMesh_45uwd")
+surface_material_override/0 = SubResource("StandardMaterial3D_yo84w")

@@ -1,54 +1,16 @@
-[gd_scene format=4 uid="uid://dbxjh3enqj63u"]
+[gd_scene format=4 uid="uid://bseevdlsfvlyl"]
 
-[ext_resource type="PackedScene" uid="uid://c3eyod1fg8oer" path="res://assets/testCube_GREEN.glb" id="1_0lnim"]
-[ext_resource type="Shader" uid="uid://c1227viguvowi" path="res://shaders/Risograph_Spatial.gdshader" id="2_s3xff"]
+[ext_resource type="PackedScene" uid="uid://di6ryn2ensf0b" path="res://assets/testCube_subdivided.glb" id="1_tnoam"]
+[ext_resource type="Shader" uid="uid://c1227viguvowi" path="res://shaders/Risograph_Spatial.gdshader" id="2_hs05o"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_xis7g"]
-render_priority = 1
-shader = ExtResource("2_s3xff")
-shader_parameter/ink_color = Color(0.953446, 0.23113337, 0.36354402, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wlpsv"]
+render_priority = 0
+shader = ExtResource("2_hs05o")
+shader_parameter/ink_color = Color(0.9874802, 0.49885803, 0.54198235, 1)
 shader_parameter/ink_opacity = 1.0
 shader_parameter/background = Color(0.93, 0.91, 0.88, 1)
 shader_parameter/density_scale = 1.0
 shader_parameter/density_dark = 0.9
-shader_parameter/density_light = 0.686000032585
-shader_parameter/stipple_scale = 1200.0
-shader_parameter/stipple_size = 1.2
-shader_parameter/stipple_softness = 1.15
-shader_parameter/stipple_jitter = 0.8
-shader_parameter/dot_size_variation = 0.5
-shader_parameter/dot_opacity_variation = 0.75
-shader_parameter/dot_shape_variation = 0.9
-shader_parameter/noise_density_scale = 1.39
-shader_parameter/noise_threshold = 0.7
-shader_parameter/noise_threshold_blend = 0.08
-shader_parameter/paper_grain_amount = 0.03
-shader_parameter/paper_grain_size = 0.8
-shader_parameter/screen_angle = 0.0
-shader_parameter/anim_speed = 1.0
-shader_parameter/anim_strength = 0.15
-shader_parameter/anim_density_jitter = 0.02
-shader_parameter/halftone_anim_strength = 0.4
-shader_parameter/halftone_size_anim = 0.2
-shader_parameter/halftone_opacity_anim = 0.15
-shader_parameter/alpha = 1.0
-shader_parameter/uv_offset = Vector2(0, 0)
-shader_parameter/use_screen_uv = true
-shader_parameter/edge_jitter_strength = 0.04
-shader_parameter/edge_jitter_scale = 3.0
-shader_parameter/edge_jitter_speed = 3.0
-shader_parameter/edge_jitter_normal_bias = 0.5
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s3xff"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_s3xff"]
-render_priority = 0
-shader = ExtResource("2_s3xff")
-shader_parameter/ink_color = Color(0.85, 0.15, 0.3, 1)
-shader_parameter/ink_opacity = 1.0
-shader_parameter/background = Color(1, 1, 1, 1)
-shader_parameter/density_scale = 1.0
-shader_parameter/density_dark = 1.0
 shader_parameter/density_light = 0.6
 shader_parameter/stipple_scale = 1200.0
 shader_parameter/stipple_size = 1.2
@@ -57,7 +19,7 @@ shader_parameter/stipple_jitter = 0.8
 shader_parameter/dot_size_variation = 0.5
 shader_parameter/dot_opacity_variation = 0.75
 shader_parameter/dot_shape_variation = 0.9
-shader_parameter/noise_density_scale = 1.205
+shader_parameter/noise_density_scale = 0.9
 shader_parameter/noise_threshold = 0.7
 shader_parameter/noise_threshold_blend = 0.08
 shader_parameter/paper_grain_amount = 0.03
@@ -73,18 +35,16 @@ shader_parameter/alpha = 1.0
 shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/use_screen_uv = true
 shader_parameter/edge_jitter_strength = 0.04
-shader_parameter/edge_jitter_scale = 6.585
-shader_parameter/edge_jitter_speed = 2.0
+shader_parameter/edge_jitter_scale = 7.93
+shader_parameter/edge_jitter_speed = 4.0
 shader_parameter/edge_jitter_normal_bias = 0.5
 
-[sub_resource type="BoxMesh" id="BoxMesh_xis7g"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pvt1p"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8u15x"]
 render_priority = 0
-shader = ExtResource("2_s3xff")
+shader = ExtResource("2_hs05o")
 shader_parameter/ink_color = Color(1, 1, 1, 1)
 shader_parameter/ink_opacity = 0.85
-shader_parameter/background = Color(1, 1, 1, 1)
+shader_parameter/background = Color(0.93, 0.91, 0.88, 1)
 shader_parameter/density_scale = 1.0
 shader_parameter/density_dark = 0.9
 shader_parameter/density_light = 0.6
@@ -111,16 +71,16 @@ shader_parameter/alpha = 1.0
 shader_parameter/uv_offset = Vector2(0, 0)
 shader_parameter/use_screen_uv = true
 shader_parameter/edge_jitter_strength = 0.04
-shader_parameter/edge_jitter_scale = 3.5
+shader_parameter/edge_jitter_scale = 0.0
 shader_parameter/edge_jitter_speed = 4.0
-shader_parameter/edge_jitter_normal_bias = 0.5
+shader_parameter/edge_jitter_normal_bias = 0.034000001615
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w0j45"]
 resource_name = "Material"
 cull_mode = 2
 vertex_color_use_as_albedo = true
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_s3xff"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_ko6un"]
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
 "format": 34896613377,
@@ -134,7 +94,7 @@ _surfaces = [{
 }]
 blend_shape_mode = 0
 
-[sub_resource type="ArrayMesh" id="ArrayMesh_45uwd"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_gk8j7"]
 resource_name = "testCube_RED_EDGES_Cube_008"
 _surfaces = [{
 "aabb": AABB(-1, -1, -1, 2, 2, 2),
@@ -150,21 +110,14 @@ _surfaces = [{
 "vertex_data": PackedByteArray("AAD1BAn7VNUAAAAAAABU1QAA9QT1BFTVAAD//wAAVNUAAAAA//9U1QAACfv1BFTVAAAJ+wn7VNUAAP////9U1Qn7AAD1BP+/AAAAAAAA/7/1BAAA9QT/vwAAAAD///+///8AAAAA/7/1BAAACfv/vwn7AAAJ+/+///8AAP///7///wn79QRU1f//AAAAAFTV///1BPUEVNX//wAA//9U1f////8AAFTV///1BAn7VNX//wn7CftU1f///////1TV9QT1BP///78AAP//////v/UECfv///+//////////78AAAAA////vwn7Cfv///+/Cfv1BP///7///wAA////vwn7//8J+///AAD////////1BP//Cfv//wAA//8AAP/////////////1BP//9QT//wn7///1BP///////wAA///1BPUEAAD/////AAAAAP//Cfv1BAAA////////AAD//wAAAAAAAP//CfsJ+wAA///1BAn7AAD//wAA//8AAP//VNVU1VTVVNVU1VTVVNVU1VTVVNVU1VTVVNVU1VTVVNUAAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/f6oqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKqoq////////////////////////////////////////////f/+//3//v/9//7//f/+//3//v/9//7//f/+//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/")
 }]
 blend_shape_mode = 0
-shadow_mesh = SubResource("ArrayMesh_s3xff")
+shadow_mesh = SubResource("ArrayMesh_ko6un")
 
-[node name="testCube_GREEN" unique_id=16015981 instance=ExtResource("1_0lnim")]
+[node name="testCube_subdivided" unique_id=1714005188 instance=ExtResource("1_tnoam")]
 
-[node name="CubeGREEN" parent="." index="0" unique_id=1948009828]
+[node name="Cube" parent="." index="0" unique_id=63605135]
+material_override = SubResource("ShaderMaterial_wlpsv")
+
+[node name="Outine" type="MeshInstance3D" parent="Cube" index="0" unique_id=1342337249]
 visible = false
-material_overlay = SubResource("ShaderMaterial_xis7g")
-surface_material_override/0 = SubResource("StandardMaterial3D_s3xff")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." index="1" unique_id=412035387]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_s3xff")
-mesh = SubResource("BoxMesh_xis7g")
-
-[node name="Outine" type="MeshInstance3D" parent="." index="2" unique_id=1815732203]
-visible = false
-material_override = SubResource("ShaderMaterial_pvt1p")
-mesh = SubResource("ArrayMesh_45uwd")
+material_override = SubResource("ShaderMaterial_8u15x")
+mesh = SubResource("ArrayMesh_gk8j7")
